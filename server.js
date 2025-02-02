@@ -8,6 +8,11 @@ app.use(express.json());
 app.use(cors());
 
 const DATA_FILE = 'data.json';
+
+app.get('/', (req, res) => {
+    res.send('Backend berjalan dengan baik!');
+});
+
 // Get All Services
 app.get('/services', (req, res) => {
     const data = loadData(); // Load data dari fail JSON
