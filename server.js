@@ -8,6 +8,11 @@ app.use(express.json());
 app.use(cors());
 
 const DATA_FILE = 'data.json';
+// Tambah route utama untuk semak server berjalan
+app.get('/', (req, res) => {
+    res.send('Backend berjalan dengan baik!');
+});
+
 
 // Load Data from JSON
 const loadData = () => {
