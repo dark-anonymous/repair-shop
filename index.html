@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servis Repair</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Senarai Servis</h1>
+        <ul id="serviceList"></ul>
+        <input type="text" id="customerName" placeholder="Nama Anda">
+        <button onclick="placeOrder()">Buat Tempahan</button>
+    
+        <h2>Tambah Servis Baru</h2>
+        <input type="text" id="serviceName" placeholder="Nama Servis">
+        <input type="number" id="servicePrice" placeholder="Harga">
+        <button onclick="addService()">Tambah Servis</button>
+    </div>
+    
+    <script>
+        async function loadServices() {
+            const res = await fetch('http://localhost:5000/services');
+            const services = await res.json();
+            document.getElementById('serviceList').innerHTML = services.map(s => `<li>${s.name} - RM${s.price}</li>`).join('');
+        }
+
+        async function placeOrder() {
+            const name = document.getElementById('customerName').value;
+            if (!name) return alert('Sila masukkan nama anda!');
+            await fetch('http://localhost:5000/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, service: 'Repair Service' })
+            });
+            alert('Tempahan Berjaya!');
+        }
+
+        async function addService() {
+            const name = document.getElementById('serviceName').value;
+            const price = document.getElementById('servicePrice').value;
+            if (!name || !price) return alert('Sila masukkan nama servis dan harga!');
+            await fetch('http://localhost:5000/services', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, price })
+            });
+            alert('Servis Ditambah!');
+            loadServices();
+        }
+
+        loadServices();
+    </script>
+</body>
+</html>
